@@ -8,6 +8,10 @@ export function App() {
     {message: "hi!", id: "3", user: {id: "2", name: "comrus"}},
   ])
 
+  function handleClick() {
+    setMessages([...messages, {message: "ok!", id: "3", user: {id: "2", name: "comrus"}}])
+  }
+
   return (
       <>
         <div>
@@ -20,10 +24,10 @@ export function App() {
             ))
           }
         </div>
-        <textarea style={{display: "block"}}>
+        <textarea style={{display: "block"}} >
 
         </textarea>
-        <button>Отправить</button>
+        <button onClick={handleClick}>Отправить</button>
       </>
 
   )
