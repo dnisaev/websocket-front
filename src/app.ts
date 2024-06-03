@@ -1,6 +1,5 @@
 import express from 'express';
 import {createServer} from 'node:http';
-import {join} from 'node:path';
 import {Server} from 'socket.io';
 
 const app = express();
@@ -18,5 +17,5 @@ io.on('connection', (socket) => {
 const PORT = process.env.PORT || 3009;
 
 server.listen(PORT, () => {
-    console.log(`server running at http://localhost:${PORT}`);
+    console.log(`server running at :${PORT}`);
 });
