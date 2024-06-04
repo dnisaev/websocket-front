@@ -1,6 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+
+import { io } from 'socket.io-client'
 
 export function App() {
+  useEffect(() => {
+    const socket = io('https://websocket-back-dnisaev.amvera.io/')
+
+    console.log(socket)
+  }, [])
   const [messages, setMessages] = useState([
     { id: '1', message: 'hello!', user: { id: '1', name: 'dnisaev' } },
     { id: '2', message: 'everybody!', user: { id: '1', name: 'dnisaev' } },
