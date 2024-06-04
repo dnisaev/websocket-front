@@ -1,22 +1,35 @@
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 
 import { io } from 'socket.io-client'
 
+const socket = io('http://localhost:3009/')
+
+type User = {
+  id: string
+  name: string
+}
+type Message = {
+  id: string
+  message: string
+  user: User
+}
+type Messages = Message[]
+
 export function App() {
-  useEffect(() => {
-    const socket = io('https://websocket-back-dnisaev.amvera.io/')
+  const [message, setMessage] = useState('')
+  const [messages, setMessages] = useState<Messages>([])
 
-    console.log(socket)
-  }, [])
-  const [messages, setMessages] = useState([
-    { id: '1', message: 'hello!', user: { id: '1', name: 'dnisaev' } },
-    { id: '2', message: 'everybody!', user: { id: '1', name: 'dnisaev' } },
-    { id: '3', message: 'hi!', user: { id: '2', name: 'comrus' } },
-  ])
-
-  function handleClick() {
-    setMessages([...messages, { id: '3', message: 'ok!', user: { id: '2', name: 'comrus' } }])
+  const onClickHandler = () => {
+    socket.emit('client-message-sent', message)
+    setMessage('')
   }
+
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => setMessage(e.currentTarget.value)
+
+  useEffect(() => {
+    socket.on('init-messages-published', (messages: Messages) => setMessages(messages))
+    socket.on('new-message-sent', (message: Message) => setMessages(() => [...messages, message]))
+  }, [messages])
 
   return (
     <>
@@ -28,8 +41,13 @@ export function App() {
           </div>
         ))}
       </div>
-      <textarea style={{ display: 'block' }}></textarea>
-      <button onClick={handleClick}>Отправить</button>
+      <input
+        onChange={onChangeHandler}
+        style={{ display: 'block' }}
+        type={'text'}
+        value={message}
+      />
+      <button onClick={onClickHandler}>Отправить</button>
     </>
   )
 }
