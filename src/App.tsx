@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 
 import { io } from 'socket.io-client'
 
-const socket = io('http://localhost:3009/')
-// const socket = io('https://websocket-back-dnisaev.amvera.io/')
+// const socket = io('http://localhost:3009/')
+const socket = io('https://websocket-back-dnisaev.amvera.io/')
 
 type User = {
   id: string
