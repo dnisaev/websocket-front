@@ -1,8 +1,9 @@
-import { ChangeEvent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { io } from 'socket.io-client'
 
 const socket = io('http://localhost:3009/')
+// const socket = io('https://websocket-back-dnisaev.amvera.io/')
 
 type User = {
   id: string
@@ -16,15 +17,10 @@ type Message = {
 type Messages = Message[]
 
 export function App() {
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState<string>('')
+  const [name, setName] = useState<string>('')
+
   const [messages, setMessages] = useState<Messages>([])
-
-  const onClickHandler = () => {
-    socket.emit('client-message-sent', message)
-    setMessage('')
-  }
-
-  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => setMessage(e.currentTarget.value)
 
   useEffect(() => {
     socket.on('init-messages-published', (messages: Messages) => setMessages(messages))
@@ -42,12 +38,26 @@ export function App() {
         ))}
       </div>
       <input
-        onChange={onChangeHandler}
-        style={{ display: 'block' }}
+        onChange={e => setName(e.currentTarget.value)}
+        placeholder={'Введите имя'}
         type={'text'}
-        value={message}
+        value={name}
       />
-      <button onClick={onClickHandler}>Отправить</button>
+      <button onClick={() => socket.emit('client-name-sent', name)}>Отправить</button>
+      <br />
+      <input
+        onChange={e => setMessage(e.currentTarget.value)}
+        placeholder={'Введите сообщение'}
+        value={message}
+      ></input>
+      <button
+        onClick={() => {
+          socket.emit('client-message-sent', message)
+          setMessage('')
+        }}
+      >
+        Отправить
+      </button>
     </>
   )
 }
