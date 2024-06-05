@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
 
-import { Chat } from '@/components/Chat'
-import { SaveName } from '@/components/SaveName'
-import { SendMessage } from '@/components/SendMessage'
+import { Chat } from '@/components/Chat/Chat'
+import { SaveName } from '@/components/SaveName/SaveName'
+import { SendMessage } from '@/components/SendMessage/SendMessage'
 import { io } from 'socket.io-client'
+
+import s from './App.module.scss'
 
 const socket = io('http://localhost:3009/')
 // const socket = io('https://websocket-back-dnisaev.amvera.io/')
@@ -31,7 +33,7 @@ export function App() {
   }, [messages])
 
   return (
-    <div>
+    <div className={s.root}>
       <Chat messages={messages} />
       <SaveName changeActive={changeActive} socket={socket} />
       <SendMessage isActive={isActive} socket={socket} />
