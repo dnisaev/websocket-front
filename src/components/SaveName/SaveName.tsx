@@ -10,6 +10,12 @@ export const SaveName = ({ changeActive, socket }: Props) => {
   const [name, setName] = useState<string>('')
 
   const onChangeName = (e: ChangeEvent<HTMLInputElement>) => setName(e.currentTarget.value)
+  const onKeyDownHandler = (e: any) => {
+    if (e.keyCode === 13) {
+      saveName()
+      e.target.blur()
+    }
+  }
   const saveName = () => {
     socket.emit('client-name-sent', name)
     changeActive()
@@ -23,6 +29,7 @@ export const SaveName = ({ changeActive, socket }: Props) => {
         id={'input-with-sx'}
         label={'Введите имя'}
         onChange={onChangeName}
+        onKeyDown={onKeyDownHandler}
         value={name}
         variant={'standard'}
       />

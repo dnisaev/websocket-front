@@ -9,6 +9,11 @@ export const SendMessage = ({ isActive, socket }: Props) => {
   const [message, setMessage] = useState<string>('')
 
   const onChangeMessage = (e: ChangeEvent<HTMLInputElement>) => setMessage(e.currentTarget.value)
+  const onKeyDownHandler = (e: any) => {
+    if (e.keyCode === 13) {
+      sendMessage()
+    }
+  }
   const sendMessage = () => {
     socket.emit('client-message-sent', message)
     setMessage('')
@@ -20,9 +25,8 @@ export const SendMessage = ({ isActive, socket }: Props) => {
         className={s.textField}
         disabled={isActive}
         label={'Введите сообщение'}
-        maxRows={4}
-        multiline
         onChange={onChangeMessage}
+        onKeyDown={onKeyDownHandler}
         value={message}
       />
       <Button

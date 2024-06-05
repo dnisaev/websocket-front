@@ -3,12 +3,13 @@ import { useCallback, useEffect, useState } from 'react'
 import { Chat } from '@/components/Chat/Chat'
 import { SaveName } from '@/components/SaveName/SaveName'
 import { SendMessage } from '@/components/SendMessage/SendMessage'
+import { Card } from '@mui/material'
 import { io } from 'socket.io-client'
 
 import s from './App.module.scss'
 
-const socket = io('http://localhost:3009/')
-// const socket = io('https://websocket-back-dnisaev.amvera.io/')
+// const socket = io('http://localhost:3009/')
+const socket = io('https://websocket-back-dnisaev.amvera.io/')
 
 type User = {
   id: string
@@ -35,8 +36,10 @@ export function App() {
   return (
     <div className={s.root}>
       <Chat messages={messages} />
-      <SaveName changeActive={changeActive} socket={socket} />
-      <SendMessage isActive={isActive} socket={socket} />
+      <Card className={s.card}>
+        <SaveName changeActive={changeActive} socket={socket} />
+        <SendMessage isActive={isActive} socket={socket} />
+      </Card>
     </div>
   )
 }
