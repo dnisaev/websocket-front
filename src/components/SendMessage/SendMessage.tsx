@@ -18,6 +18,7 @@ export const SendMessage = ({ isActive, socket }: Props) => {
     <Box className={s.box}>
       <TextField
         className={s.textField}
+        disabled={isActive}
         label={'Введите сообщение'}
         maxRows={4}
         multiline
