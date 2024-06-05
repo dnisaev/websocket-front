@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { createRef, useCallback, useEffect, useState } from 'react'
 
 import { Chat } from '@/components/Chat/Chat'
 import { SaveName } from '@/components/SaveName/SaveName'
@@ -27,15 +27,21 @@ export function App() {
   const [isActive, setActive] = useState<boolean>(true)
 
   const changeActive = useCallback(() => setActive(false), [])
+  const messagesEndRef = createRef()
+
+  const scrollToBottom = (messagesEndRef: any) => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
 
   useEffect(() => {
     socket.on('init-messages-published', (messages: Messages) => setMessages(messages))
     socket.on('new-message-sent', (message: Message) => setMessages(() => [...messages, message]))
-  }, [messages])
+    scrollToBottom(messagesEndRef)
+  }, [messages, messagesEndRef])
 
   return (
     <div className={s.root}>
-      <Chat messages={messages} />
+      <Chat messages={messages} messagesEndRef={messagesEndRef} />
       <Card className={s.card}>
         <SaveName changeActive={changeActive} socket={socket} />
         <SendMessage isActive={isActive} socket={socket} />

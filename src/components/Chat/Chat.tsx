@@ -3,7 +3,7 @@ import { Card } from '@mui/material'
 
 import s from './Chat.module.scss'
 
-export const Chat = ({ messages }: Props) => {
+export const Chat = ({ messages, messagesEndRef }: Props) => {
   return (
     <Card className={s.card}>
       {messages.map(m => (
@@ -12,10 +12,12 @@ export const Chat = ({ messages }: Props) => {
           <hr />
         </div>
       ))}
+      <div ref={messagesEndRef} />
     </Card>
   )
 }
 
 type Props = {
   messages: Messages
+  messagesEndRef: any
 }
