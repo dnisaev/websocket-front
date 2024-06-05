@@ -8,8 +8,8 @@ import { io } from 'socket.io-client'
 
 import s from './App.module.scss'
 
-const socket = io('http://localhost:3009/')
-// const socket = io('https://websocket-back-dnisaev.amvera.io/')
+// const socket = io('http://localhost:3009/')
+const socket = io('https://websocket-back-dnisaev.amvera.io/')
 
 type User = {
   id: string
