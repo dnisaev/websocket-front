@@ -8,8 +8,8 @@ import { io } from 'socket.io-client'
 
 import s from './App.module.scss'
 
-// const socket = io('http://localhost:3009/')
-const socket = io('https://websocket-back-dnisaev.amvera.io/')
+const socket = io('http://localhost:3009/')
+// const socket = io('https://websocket-back-dnisaev.amvera.io/')
 
 type User = {
   id: string
@@ -28,7 +28,10 @@ export function App() {
   const [isAutoScrollActive, setIsAutoScrollActive] = useState(true)
   const [lastScrollTop, setLastScrollTop] = useState(0)
 
-  const onWheelHandler = (e: any) => {
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const changeActive = () => setActive(false)
+
+  const onScrollHandler = (e: any) => {
     const element = e.currentTarget
     const maxScrollPosition = element.scrollHeight - element.clientHeight
 
@@ -40,15 +43,11 @@ export function App() {
 
     setLastScrollTop(element.scrollTop)
   }
-  const changeActive = () => setActive(false)
-  const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     socket.on('init-messages-published', (messages: Messages) => setMessages(messages))
     socket.on('new-message-sent', (message: Message) => setMessages(() => [...messages, message]))
-  }, [messages])
 
-  useEffect(() => {
     if (isAutoScrollActive) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
     }
@@ -56,7 +55,7 @@ export function App() {
 
   return (
     <div className={s.app}>
-      <Chat messages={messages} messagesEndRef={messagesEndRef} onWheelHandler={onWheelHandler} />
+      <Chat messages={messages} messagesEndRef={messagesEndRef} onScrollHandler={onScrollHandler} />
       <Card className={s.card}>
         <SaveName changeActive={changeActive} socket={socket} />
         <SendMessage isActive={isActive} socket={socket} />

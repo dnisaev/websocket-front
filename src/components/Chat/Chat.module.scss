@@ -1,6 +1,9 @@
-.chat {
+.wrapper {
   height: 100%;
+  overflow-y: scroll;
+}
+
+.chat {
   margin: 8px 0;
   padding: 12px;
-  overflow-y: scroll !important;
 }
