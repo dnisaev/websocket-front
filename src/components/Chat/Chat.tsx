@@ -1,3 +1,5 @@
+import { RefObject } from 'react'
+
 import { Messages } from '@/App'
 import { Card } from '@mui/material'
 
@@ -19,5 +21,5 @@ export const Chat = ({ messages, messagesEndRef }: Props) => {
 
 type Props = {
   messages: Messages
-  messagesEndRef: any
+  messagesEndRef: RefObject<HTMLDivElement>
 }

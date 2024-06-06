@@ -1,4 +1,4 @@
-import { createRef, useCallback, useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { Chat } from '@/components/Chat/Chat'
 import { SaveName } from '@/components/SaveName/SaveName'
@@ -26,18 +26,17 @@ export function App() {
   const [messages, setMessages] = useState<Messages>([])
   const [isActive, setActive] = useState<boolean>(true)
 
-  const changeActive = useCallback(() => setActive(false), [])
-  const messagesEndRef = createRef()
-
-  const scrollToBottom = (messagesEndRef: any) => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }
+  const changeActive = () => setActive(false)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     socket.on('init-messages-published', (messages: Messages) => setMessages(messages))
     socket.on('new-message-sent', (message: Message) => setMessages(() => [...messages, message]))
-    scrollToBottom(messagesEndRef)
-  }, [messages, messagesEndRef])
+  }, [messages])
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messagesEndRef])
 
   return (
     <div className={s.root}>
