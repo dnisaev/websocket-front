@@ -32,13 +32,11 @@ export function App() {
     const element = e.currentTarget
     const maxScrollPosition = element.scrollHeight - element.clientHeight
 
-    console.log(maxScrollPosition)
-    console.log(e)
-    console.log('------------------')
-
-    element.scrollTop > lastScrollTop && Math.abs(maxScrollPosition - element.scrollTop) < 10
-      ? setIsAutoScrollActive(true)
-      : setIsAutoScrollActive(false)
+    if (element.scrollTop > lastScrollTop || Math.abs(maxScrollPosition - element.scrollTop) < 10) {
+      setIsAutoScrollActive(true)
+    } else {
+      setIsAutoScrollActive(false)
+    }
 
     setLastScrollTop(element.scrollTop)
   }
@@ -57,13 +55,12 @@ export function App() {
   }, [isAutoScrollActive, messages])
 
   return (
-    <div className={s.app} onWheel={onWheelHandler}>
-      <Chat messages={messages} />
+    <div className={s.app}>
+      <Chat messages={messages} messagesEndRef={messagesEndRef} onWheelHandler={onWheelHandler} />
       <Card className={s.card}>
         <SaveName changeActive={changeActive} socket={socket} />
         <SendMessage isActive={isActive} socket={socket} />
       </Card>
-      <div ref={messagesEndRef} />
     </div>
   )
 }
