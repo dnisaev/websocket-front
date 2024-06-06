@@ -24,8 +24,24 @@ export type Messages = Message[]
 
 export function App() {
   const [messages, setMessages] = useState<Messages>([])
-  const [isActive, setActive] = useState<boolean>(true)
+  const [isActive, setActive] = useState(true)
+  const [isAutoScrollActive, setIsAutoScrollActive] = useState(true)
+  const [lastScrollTop, setLastScrollTop] = useState(0)
 
+  const onWheelHandler = (e: any) => {
+    const element = e.currentTarget
+    const maxScrollPosition = element.scrollHeight - element.clientHeight
+
+    console.log(maxScrollPosition)
+    console.log(e)
+    console.log('------------------')
+
+    element.scrollTop > lastScrollTop && Math.abs(maxScrollPosition - element.scrollTop) < 10
+      ? setIsAutoScrollActive(true)
+      : setIsAutoScrollActive(false)
+
+    setLastScrollTop(element.scrollTop)
+  }
   const changeActive = () => setActive(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
@@ -35,16 +51,19 @@ export function App() {
   }, [messages])
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages, messagesEndRef])
+    if (isAutoScrollActive) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [isAutoScrollActive, messages])
 
   return (
-    <div className={s.root}>
-      <Chat messages={messages} messagesEndRef={messagesEndRef} />
+    <div className={s.app} onWheel={onWheelHandler}>
+      <Chat messages={messages} />
       <Card className={s.card}>
         <SaveName changeActive={changeActive} socket={socket} />
         <SendMessage isActive={isActive} socket={socket} />
       </Card>
+      <div ref={messagesEndRef} />
     </div>
   )
 }
