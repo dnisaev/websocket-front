@@ -1,29 +1,29 @@
 import { useEffect, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
+import { socket } from '@/api/api'
 import { Chat } from '@/components/Chat/Chat'
 import { SaveName } from '@/components/SaveName/SaveName'
 import { SendMessage } from '@/components/SendMessage/SendMessage'
+import { chatReducer, createConnectionTC, destroyConnectionTC } from '@/store/chat-reducer'
 import { Card } from '@mui/material'
-import { io } from 'socket.io-client'
+import { applyMiddleware, combineReducers, legacy_createStore as createStore } from 'redux'
+import { thunk } from 'redux-thunk'
 
 import s from './App.module.scss'
 
-// const socket = io('http://localhost:3009/')
-const socket = io('https://websocket-back-dnisaev.amvera.io/')
+const rootReducer = combineReducers({ chat: chatReducer })
+const store = createStore(rootReducer, applyMiddleware(thunk))
 
-type User = {
-  id: string
-  name: string
-}
-type Message = {
-  id: string
-  message: string
-  user: User
-}
-export type Messages = Message[]
+//@ts-ignore
+window.store = store
 
 export function App() {
-  const [messages, setMessages] = useState<Messages>([])
+  const messages = useSelector((state: AppStateType) => state.chat.messages)
+
+  const dispatch: any = useDispatch()
+
+  // const [messages, setMessages] = useState<Messages>([])
   const [isActive, setActive] = useState(true)
   const [isAutoScrollActive, setIsAutoScrollActive] = useState(true)
   const [lastScrollTop, setLastScrollTop] = useState(0)
@@ -45,9 +45,14 @@ export function App() {
   }
 
   useEffect(() => {
-    socket.on('init-messages-published', (messages: Messages) => setMessages(messages))
-    socket.on('new-message-sent', (message: Message) => setMessages(() => [...messages, message]))
+    dispatch(createConnectionTC())
 
+    return () => {
+      dispatch(destroyConnectionTC())
+    }
+  }, [dispatch])
+
+  useEffect(() => {
     if (isAutoScrollActive) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
     }
@@ -63,3 +68,15 @@ export function App() {
     </div>
   )
 }
+
+type User = {
+  id: string
+  name: string
+}
+export type Message = {
+  id: string
+  message: string
+  user: User
+}
+export type Messages = Message[]
+export type AppStateType = ReturnType<typeof rootReducer>
