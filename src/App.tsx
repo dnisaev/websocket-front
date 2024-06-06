@@ -36,7 +36,7 @@ export function App() {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messagesEndRef])
+  }, [messages, messagesEndRef])
 
   return (
     <div className={s.root}>
