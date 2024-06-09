@@ -15,6 +15,7 @@ export const SendMessage = ({ isActive }: Props) => {
   const onKeyDownHandler = (e: any) => {
     if (e.keyCode === 13) {
       dispatch(sendMessageTC(message))
+      setMessage('')
     }
   }
   const sendMessage = () => {
