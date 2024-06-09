@@ -57,7 +57,7 @@ export function App() {
   )
 }
 
-type User = {
+export type User = {
   id: string
   name: string
 }

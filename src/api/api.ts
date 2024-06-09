@@ -1,4 +1,4 @@
-import { Message, Messages } from '@/App'
+import { Message, Messages, User } from '@/App'
 import { Socket, io } from 'socket.io-client'
 
 export const api = {
@@ -19,9 +19,14 @@ export const api = {
   socket: null as Socket | null,
   subscribe(
     initMessages: (messages: Messages) => void,
-    newMessagesSent: (message: Message) => void
+    newMessagesSent: (message: Message) => void,
+    userTyping: (user: User) => void
   ) {
     this.socket?.on('init-messages-published', initMessages)
     this.socket?.on('new-message-sent', newMessagesSent)
+    this.socket?.on('user-typing', userTyping)
+  },
+  typeMessage() {
+    this.socket?.emit('client-typed')
   },
 }

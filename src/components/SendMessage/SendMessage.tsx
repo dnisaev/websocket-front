@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { sendMessageTC } from '@/store/chat-reducer'
+import { sendMessageTC, typeMessageTC } from '@/store/chat-reducer'
 import SendSharpIcon from '@mui/icons-material/SendSharp'
 import { Box, Button, TextField } from '@mui/material'
 
@@ -13,6 +13,7 @@ export const SendMessage = ({ isActive }: Props) => {
 
   const onChangeMessage = (e: ChangeEvent<HTMLInputElement>) => setMessage(e.currentTarget.value)
   const onKeyDownHandler = (e: any) => {
+    dispatch(typeMessageTC())
     if (e.keyCode === 13) {
       dispatch(sendMessageTC(message))
       setMessage('')
