@@ -1,21 +1,24 @@
 import { ChangeEvent, useState } from 'react'
+import { useDispatch } from 'react-redux'
 
+import { sendMessageTC } from '@/store/chat-reducer'
 import SendSharpIcon from '@mui/icons-material/SendSharp'
 import { Box, Button, TextField } from '@mui/material'
 
 import s from './SendMessage.module.scss'
 
-export const SendMessage = ({ isActive, socket }: Props) => {
+export const SendMessage = ({ isActive }: Props) => {
+  const dispatch: any = useDispatch()
   const [message, setMessage] = useState<string>('')
 
   const onChangeMessage = (e: ChangeEvent<HTMLInputElement>) => setMessage(e.currentTarget.value)
   const onKeyDownHandler = (e: any) => {
     if (e.keyCode === 13) {
-      sendMessage()
+      dispatch(sendMessageTC(message))
     }
   }
   const sendMessage = () => {
-    socket.emit('client-message-sent', message)
+    dispatch(sendMessageTC(message))
     setMessage('')
   }
 
@@ -45,5 +48,4 @@ export const SendMessage = ({ isActive, socket }: Props) => {
 
 type Props = {
   isActive: boolean
-  socket: any
 }

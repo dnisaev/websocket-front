@@ -1,23 +1,27 @@
 import { ChangeEvent, useState } from 'react'
+import { useDispatch } from 'react-redux'
 
+import { saveNameTC } from '@/store/chat-reducer'
 import { AccountCircle } from '@mui/icons-material'
 import SaveAltSharpIcon from '@mui/icons-material/SaveAltSharp'
 import { Box, Button, TextField } from '@mui/material'
 
 import s from './SaveName.module.scss'
 
-export const SaveName = ({ changeActive, socket }: Props) => {
+export const SaveName = ({ changeActive }: Props) => {
+  const dispatch: any = useDispatch()
   const [name, setName] = useState<string>('')
 
   const onChangeName = (e: ChangeEvent<HTMLInputElement>) => setName(e.currentTarget.value)
   const onKeyDownHandler = (e: any) => {
     if (e.keyCode === 13) {
-      saveName()
+      dispatch(saveNameTC(name))
       e.target.blur()
+      changeActive()
     }
   }
   const saveName = () => {
-    socket.emit('client-name-sent', name)
+    dispatch(saveNameTC(name))
     changeActive()
   }
 
@@ -48,5 +52,4 @@ export const SaveName = ({ changeActive, socket }: Props) => {
 
 type Props = {
   changeActive: () => void
-  socket: any
 }
