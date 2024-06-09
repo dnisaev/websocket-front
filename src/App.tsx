@@ -12,16 +12,13 @@ import s from './App.module.scss'
 
 export function App() {
   const messages = useSelector((state: AppStateType) => state.chat.messages)
-
   const dispatch: any = useDispatch()
 
   const [isActive, setActive] = useState(true)
-  const [isAutoScrollActive, setIsAutoScrollActive] = useState(true)
-  const [lastScrollTop, setLastScrollTop] = useState(0)
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
-  const changeActive = () => setActive(false)
-
+  const [isAutoScrollActive, setIsAutoScrollActive] = useState(true)
+  const [lastScrollTop, setLastScrollTop] = useState(0)
   const onScrollHandler = (e: any) => {
     const element = e.currentTarget
     const maxScrollPosition = element.scrollHeight - element.clientHeight
@@ -47,13 +44,13 @@ export function App() {
     if (isAutoScrollActive) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
     }
-  }, [isAutoScrollActive, messages])
+  }, [isAutoScrollActive, messages, messagesEndRef])
 
   return (
     <div className={s.app}>
       <Chat messages={messages} messagesEndRef={messagesEndRef} onScrollHandler={onScrollHandler} />
       <Card className={s.card}>
-        <SaveName changeActive={changeActive} />
+        <SaveName changeActive={() => setActive(false)} />
         <SendMessage isActive={isActive} />
       </Card>
     </div>
