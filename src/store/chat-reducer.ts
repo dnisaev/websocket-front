@@ -35,7 +35,7 @@ export const chatReducer = (state: any = initialState, action: any) => {
 }
 
 export const messagesReceivedAC = (messages: Messages) => ({ messages, type: 'MESSAGES-RECEIVED' })
-export const typingUserAdded = (user: User) => ({ type: 'TYPING-USER-ADDED', user })
+export const typingUserAddedAC = (user: User) => ({ type: 'TYPING-USER-ADDED', user })
 export const newMessageReceivedAC = (message: Message) => ({
   message,
   type: 'NEW-MESSAGE-RECEIVED',
@@ -44,9 +44,12 @@ export const newMessageReceivedAC = (message: Message) => ({
 export const createConnectionTC = () => (dispatch: Dispatch) => {
   api.createConnection()
   api.subscribe(
-    messages => dispatch(messagesReceivedAC(messages)),
+    (messages, fn: () => void) => {
+      dispatch(messagesReceivedAC(messages))
+      fn()
+    },
     message => dispatch(newMessageReceivedAC(message)),
-    user => dispatch(typingUserAdded(user))
+    user => dispatch(typingUserAddedAC(user))
   )
 }
 

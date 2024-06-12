@@ -14,11 +14,11 @@ export const api = {
     this.socket?.emit('client-name-sent', name)
   },
   sendMessage(message: string) {
-    this.socket?.emit('client-message-sent', message)
+    this.socket?.emit('client-message-sent', message, (error: null | string) => alert(error))
   },
   socket: null as Socket | null,
   subscribe(
-    initMessages: (messages: Messages) => void,
+    initMessages: (messages: Messages, fn: () => void) => void,
     newMessagesSent: (message: Message) => void,
     userTyping: (user: User) => void
   ) {

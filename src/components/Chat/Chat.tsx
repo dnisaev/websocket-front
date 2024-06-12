@@ -1,4 +1,4 @@
-import { LegacyRef, useEffect } from 'react'
+import { LegacyRef } from 'react'
 
 import { Messages, User } from '@/App'
 import { Card } from '@mui/material'
@@ -6,8 +6,6 @@ import { Card } from '@mui/material'
 import s from './Chat.module.scss'
 
 export const Chat = ({ messages, messagesEndRef, onScrollHandler, typingUsers }: Props) => {
-  useEffect(() => {}, [])
-
   return (
     <Card className={s.chat}>
       <div className={s.wrapper} onScroll={onScrollHandler}>
