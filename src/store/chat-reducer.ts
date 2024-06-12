@@ -13,10 +13,20 @@ export const chatReducer = (state: any = initialState, action: any) => {
       return { ...state, messages: action.messages }
     }
     case 'NEW-MESSAGE-RECEIVED': {
-      return { ...state, messages: [...state.messages, action.message] }
+      return {
+        ...state,
+        messages: [...state.messages, action.message],
+        typingUsers: state.typingUsers.filter((u: User) => u.id !== action.message.user.id),
+      }
     }
     case 'TYPING-USER-ADDED': {
-      return { ...state, typingUsers: [...state.typingUsers, action.user] }
+      return {
+        ...state,
+        typingUsers: [
+          ...state.typingUsers.filter((u: User) => u.id !== action.user.id),
+          action.user,
+        ],
+      }
     }
     default: {
       return state
@@ -36,7 +46,7 @@ export const createConnectionTC = () => (dispatch: Dispatch) => {
   api.subscribe(
     messages => dispatch(messagesReceivedAC(messages)),
     message => dispatch(newMessageReceivedAC(message)),
-    user => dispatch(typeMessageTC())
+    user => dispatch(typingUserAdded(user))
   )
 }
 

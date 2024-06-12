@@ -12,6 +12,7 @@ import s from './App.module.scss'
 
 export function App() {
   const messages = useSelector((state: AppStateType) => state.chat.messages)
+  const typingUsers = useSelector((state: AppStateType) => state.chat.typingUsers)
   const dispatch: any = useDispatch()
 
   const [isActive, setActive] = useState(true)
@@ -48,7 +49,12 @@ export function App() {
 
   return (
     <div className={s.app}>
-      <Chat messages={messages} messagesEndRef={messagesEndRef} onScrollHandler={onScrollHandler} />
+      <Chat
+        messages={messages}
+        messagesEndRef={messagesEndRef}
+        onScrollHandler={onScrollHandler}
+        typingUsers={typingUsers}
+      />
       <Card className={s.card}>
         <SaveName changeActive={() => setActive(false)} />
         <SendMessage isActive={isActive} />
