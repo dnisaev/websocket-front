@@ -45,7 +45,7 @@ export function App() {
     if (isAutoScrollActive) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
     }
-  }, [isAutoScrollActive, messages, messagesEndRef])
+  }, [isAutoScrollActive, messages, messagesEndRef, typingUsers])
 
   return (
     <div className={s.app}>

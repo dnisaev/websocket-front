@@ -1,4 +1,7 @@
 .wrapper {
+  .message {
+    word-break: break-word;
+  }
   height: 100%;
   overflow-y: scroll;
 }

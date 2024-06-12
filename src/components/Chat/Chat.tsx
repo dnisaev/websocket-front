@@ -1,4 +1,4 @@
-import { LegacyRef } from 'react'
+import { LegacyRef, useEffect } from 'react'
 
 import { Messages, User } from '@/App'
 import { Card } from '@mui/material'
@@ -6,18 +6,20 @@ import { Card } from '@mui/material'
 import s from './Chat.module.scss'
 
 export const Chat = ({ messages, messagesEndRef, onScrollHandler, typingUsers }: Props) => {
+  useEffect(() => {}, [])
+
   return (
     <Card className={s.chat}>
       <div className={s.wrapper} onScroll={onScrollHandler}>
         {messages.map(m => (
-          <div key={m.id}>
+          <div className={s.message} key={m.id}>
             <b>{m.user.name}:</b> {m.message}
             <hr />
           </div>
         ))}
         {typingUsers.map(u => (
           <div className={s.userTyping} key={u.id}>
-            {u.name} печатает...
+            {u.name + ' печатает...'}
           </div>
         ))}
         <div ref={messagesEndRef} />
